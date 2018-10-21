@@ -69,6 +69,27 @@ func (level *Level) UnmarshalText(text []byte) error {
 	return nil
 }
 
+func (level Level) MarshalText() ([]byte, error) {
+	switch level {
+	case TraceLevel:
+		return []byte("trace"), nil
+	case DebugLevel:
+		return []byte("debug"), nil
+	case InfoLevel:
+		return []byte("info"), nil
+	case WarnLevel:
+		return []byte("warning"), nil
+	case ErrorLevel:
+		return []byte("error"), nil
+	case FatalLevel:
+		return []byte("fatal"), nil
+	case PanicLevel:
+		return []byte("panic"), nil
+	}
+
+	return nil, fmt.Errorf("not a valid lorus level %q", level)
+}
+
 // A constant exposing all logging levels
 var AllLevels = []Level{
 	PanicLevel,
@@ -175,4 +196,7 @@ type Ext1FieldLogger interface {
 	Tracef(format string, args ...interface{})
 	Trace(args ...interface{})
 	Traceln(args ...interface{})
+	LogAtLevel(level Level, args ...interface{})
+	LogfAtLevel(level Level, format string, args ...interface{})
+	LoglnAtLevel(level Level, args ...interface{})
 }
